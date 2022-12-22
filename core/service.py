@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from core.models import Pair
 
 
@@ -29,3 +31,10 @@ class PairService():
                 exchange=exchange, name=name,
                 quantity_precision=qty_precision)
         return pair
+
+
+class AccountService():
+    def update_balance(self, account, amount):
+        account.balance = Decimal(amount).quantize(Decimal('.00'))
+        account.save()
+        return account.balance
