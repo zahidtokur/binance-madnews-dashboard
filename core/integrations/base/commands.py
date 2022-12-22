@@ -15,3 +15,12 @@ class BaseCommand():
 
     def process_response(self):
         raise NotImplementedError
+
+
+class BaseBulkCommand(BaseCommand):
+    def run(self):
+        for object in self.objects:
+            response = self.send_request(object)
+            self.log_request(response)
+            self.process_response(response)
+        return True

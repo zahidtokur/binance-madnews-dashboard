@@ -3,8 +3,10 @@ import urllib.parse
 import hmac
 import hashlib
 import requests
+from decimal import Decimal
 
-from core.integrations.base.commands import BaseCommand
+from core.models import Pair
+from core.integrations.base.commands import BaseCommand, BaseBulkCommand
 from core.service import PairService, AccountService
 
 
@@ -85,4 +87,142 @@ class UpdateBalance(BaseCommand):
 
         self.account_service.update_balance(
             self.integration.account, asset_data.get("balance"))
+        return True
+
+
+class SetCrossMargin(BaseBulkCommand):
+    def __init__(self, integration, objects, **kwargs):
+        super().__init__(integration, **kwargs)
+        self.request_method = "POST"
+        self.objects = objects
+
+    def get_url(self):
+        return self.integration.base_url + "/fapi/v1/marginType"
+
+    def get_headers(self):
+        return {
+            "X-MBX-APIKEY": self.integration.conf["api_key"]
+        }
+
+    def get_request_data(self, object):
+        request_data = {
+            "timestamp": int(round(time.time() * 1000)) - 1000,
+            "recvWindow": 20000,
+            "symbol": object.name,
+            "marginType": "CROSSED"}
+
+        message = urllib.parse.urlencode(request_data)
+        secret_key = self.integration.conf.get('secret_key')
+        signature = hmac.new(
+            secret_key.encode(), msg=message.encode(),
+            digestmod=hashlib.sha256).hexdigest()
+        request_data.update({"signature": signature})
+        return request_data
+
+    def send_request(self, object):
+        response = requests.request(
+            self.request_method, url=self.get_url(),
+            data=self.get_request_data(object), headers=self.get_headers())
+        return response
+
+    def process_response(self, response):
+        return response.json()
+
+
+class GetBrackets(BaseCommand):
+    def __init__(self, integration, **kwargs):
+        super().__init__(integration, **kwargs)
+        self.request_method = "GET"
+
+    def get_url(self):
+        return self.integration.base_url + "/fapi/v1/leverageBracket"
+
+    def get_headers(self):
+        return {
+            "X-MBX-APIKEY": self.integration.conf["api_key"]
+        }
+
+    def get_request_params(self):
+        request_data = {
+            "timestamp": int(round(time.time() * 1000)) - 1000,
+            "recvWindow": 20000
+        }
+
+        message = urllib.parse.urlencode(request_data)
+        secret_key = self.integration.conf.get('secret_key')
+        signature = hmac.new(
+            secret_key.encode(), msg=message.encode(),
+            digestmod=hashlib.sha256).hexdigest()
+        request_data.update({"signature": signature})
+        return request_data
+
+    def send_request(self):
+        response = requests.request(
+            self.request_method, url=self.get_url(),
+            params=self.get_request_params(), headers=self.get_headers())
+        return response
+
+    def process_response(self, response):
+        response_data = response.json()
+        if isinstance(response_data, list):
+            return response_data
+        return []
+
+
+class SetLeverage(BaseBulkCommand):
+    def __init__(self, integration, objects, **kwargs):
+        super().__init__(integration, **kwargs)
+        self.request_method = "POST"
+        self.objects = objects
+        balance = self.integration.account.balance
+        self.max_position_size = balance * 3
+
+    def get_url(self):
+        return self.integration.base_url + "/fapi/v1/leverage"
+
+    def get_headers(self):
+        return {
+            "X-MBX-APIKEY": self.integration.conf["api_key"]
+        }
+
+    def get_request_data(self, object, leverage):
+        request_data = {
+            "timestamp": int(round(time.time() * 1000)) - 1000,
+            "recvWindow": 20000,
+            "symbol": object.name,
+            "leverage": leverage}
+
+        message = urllib.parse.urlencode(request_data)
+        secret_key = self.integration.conf.get('secret_key')
+        signature = hmac.new(
+            secret_key.encode(), msg=message.encode(),
+            digestmod=hashlib.sha256).hexdigest()
+        request_data.update({"signature": signature})
+        return request_data
+
+    def send_request(self, object, leverage):
+        response = requests.request(
+            self.request_method, url=self.get_url(),
+            data=self.get_request_data(object, leverage), headers=self.get_headers())
+        return response
+
+    def process_response(self, response):
+        return response.json()
+
+    def run(self):
+        bracket_data = self.integration.run_command("get_brackets")
+        for item in bracket_data:
+            try:
+                symbol = self.objects.get(name=item["symbol"])
+                for bracket in item["brackets"]:
+                    if Decimal(bracket["notionalCap"]) > self.max_position_size:
+                        leverage = bracket["initialLeverage"]
+                        break
+            except Pair.DoesNotExist:
+                continue
+
+            response = self.send_request(symbol, leverage)
+            self.log_request(response)
+            self.process_response(response)
+
         return True
