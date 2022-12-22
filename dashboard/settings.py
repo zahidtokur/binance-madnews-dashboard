@@ -151,3 +151,7 @@ CELERY_BEAT_SCHEDULE = {
         'schedule': 60 * 60 * 12
     }
 }
+
+
+# Session settings
+SESSION_SAVE_EVERY_REQUEST = True
