@@ -21,14 +21,14 @@ class PairService():
         elif exclude_names and isinstance(exclude_names, list):
             Pair.objects.exclude(name__in=exclude_names).delete()
 
-    def update_or_create_pair(self, exchange, name, qty_precision):
+    def update_or_create_pair(self, account, name, qty_precision):
         try:
-            pair = Pair.objects.get(exchange=exchange, name=name)
+            pair = Pair.objects.get(account=account, name=name)
             pair.quantity_precision = qty_precision
             pair.save()
         except Pair.DoesNotExist:
             pair = Pair.objects.create(
-                exchange=exchange, name=name,
+                account=account, name=name,
                 quantity_precision=qty_precision)
         return pair
 
