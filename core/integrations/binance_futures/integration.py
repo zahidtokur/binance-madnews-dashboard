@@ -1,10 +1,12 @@
 from collections import OrderedDict
 
 from core.integrations.base.integration import BaseIntegration
+from core.integrations.binance_futures.commands import GetPairs
 
 
 class Integration(BaseIntegration):
     commands = OrderedDict([
+        ('get_pairs', GetPairs),
     ])
 
     @property
