@@ -7,7 +7,7 @@ from decimal import Decimal
 
 from core.models import Pair
 from core.integrations.base.commands import BaseCommand, BaseBulkCommand
-from core.service import PairService, AccountService
+from core.resources.service import PairService, AccountService
 
 
 class GetPairs(BaseCommand):

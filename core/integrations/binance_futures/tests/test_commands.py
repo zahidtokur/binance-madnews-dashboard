@@ -7,7 +7,7 @@ from django.test import TestCase
 
 from core.models import Account, Pair
 from core.integrations.binance_futures.integration import Integration
-from core.service import OrderService
+from core.resources.service import OrderService
 
 
 class BinanceTestCase(TestCase):
