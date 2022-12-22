@@ -38,3 +38,11 @@ class AccountService():
         account.balance = Decimal(amount).quantize(Decimal('.00'))
         account.save()
         return account.balance
+
+
+class OrderService():
+    def calculate_quantity(self, notional_size, price, precision):
+        quantity = notional_size / price
+        if precision == 0:
+            return quantity.quantize(Decimal('0'))
+        return quantity.quantize(Decimal('.' + '0' * precision))

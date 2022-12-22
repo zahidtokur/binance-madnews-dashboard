@@ -1,0 +1,23 @@
+{
+  "orderId": 22288111000,
+  "symbol": "SOLUSDT",
+  "status": "FILLED",
+  "clientOrderId": "aJ0RKb0aaHJbFaNQbQUDaa",
+  "price": "0",
+  "avgPrice": "14.73",
+  "origQty": "1",
+  "executedQty": "1",
+  "cumQty": "1",
+  "cumQuote": "14.73",
+  "timeInForce": "GTC",
+  "type": "MARKET",
+  "reduceOnly": false,
+  "closePosition": false,
+  "side": "BUY",
+  "positionSide": "BOTH",
+  "stopPrice": "0",
+  "workingType": "CONTRACT_PRICE",
+  "priceProtect": false,
+  "origType": "MARKET",
+  "updateTime": 1668280802729
+}
