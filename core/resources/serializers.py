@@ -1,9 +1,9 @@
 from rest_framework import serializers
 
-from core.models import Pair
+from core.models import Account
 
 
-class AccountSerializer(serializers.Serializer):
-    name = serializers.CharField(required=True)
-    secret_key = serializers.CharField(required=True)
-    api_key = serializers.CharField(required=True)
+class AccountSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Account
+        fields = ['name', 'secret_key', 'api_key']
