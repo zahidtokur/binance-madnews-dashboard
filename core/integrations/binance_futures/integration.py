@@ -16,8 +16,7 @@ class Integration(BaseIntegration):
 
     @property
     def base_url(self):
-        base_url = self.conf.get("base_url", None)
-        return base_url or "https://fapi.binance.com"
+        return "https://fapi.binance.com"
 
     def run_command(self, command_key, **kwargs):
         command_class = self.commands.get(command_key, None)

@@ -11,7 +11,8 @@ class BaseModel(models.Model):
 
 class Account(BaseModel):
     name = models.CharField(max_length=255, unique=True)
-    conf = models.JSONField()
+    secret_key = models.CharField(max_length=255, unique=True)
+    api_key = models.CharField(max_length=255, unique=True)
     balance = models.DecimalField(default=0, decimal_places=2, max_digits=10)
 
     def __str__(self) -> str:

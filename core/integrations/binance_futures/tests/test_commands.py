@@ -12,10 +12,8 @@ from core.service import OrderService
 
 class BinanceTestCase(TestCase):
     def setUp(self):
-        self.conf = {"secret_key": "ZSkpmbCakXGfZX9VlpiXsDEuEVtSWq7bz2Knc6WSt83qZ1QXmItAZ3cf1eZXBP9q",
-                     "api_key": "CckRDAh2RUTrBWnOZt1NLJI0ck9j1YT3B9hr4W4X6JUgPIFDZ9M2pzbD2ORqyPfT"}
         self.account = Account.objects.create(
-            name='Binance Test', conf=self.conf)
+            name='Binance Test', secret_key="secretkeyforbinancefutures", api_key="apikeyforbinancefutures")
         self.order_service = OrderService()
 
     def load_response_file(self, filename, extension="json"):
@@ -31,7 +29,7 @@ class BinanceTestCase(TestCase):
 
     @requests_mock.mock()
     def test_get_pairs(self, m):
-        i = Integration(self.account, self.conf)
+        i = Integration(self.account)
         m.register_uri("GET", requests_mock.ANY,
                        json=self.load_response_file("get_pairs_response"))
 
@@ -42,7 +40,7 @@ class BinanceTestCase(TestCase):
 
     @requests_mock.mock()
     def test_update_balance(self, m):
-        i = Integration(self.account, self.conf)
+        i = Integration(self.account)
         m.register_uri("GET", requests_mock.ANY,
                        json=self.load_response_file("update_balance_response"))
 
@@ -51,10 +49,10 @@ class BinanceTestCase(TestCase):
         self.assertEqual(self.account.balance, Decimal("200.07"))
 
     @requests_mock.mock()
-    def test_get_symbol_price(self, m):
-        i = Integration(self.exchange, self.conf)
+    def test_get_pair_price(self, m):
+        i = Integration(self.account)
         pair = Pair.objects.create(
-            exchange=self.exchange, name='SOLUSDT', quantity_precision=0)
+            account=self.account, name='SOLUSDT', quantity_precision=0)
         m.register_uri("GET", requests_mock.ANY,
                        json=self.load_response_file("get_pair_price_response"))
         result = i.run_command("get_pair_price", pair=pair)
@@ -62,9 +60,9 @@ class BinanceTestCase(TestCase):
 
     @requests_mock.mock()
     def test_create_order(self, m):
-        i = Integration(self.exchange, self.conf)
+        i = Integration(self.account)
         pair = Pair.objects.create(
-            exchange=self.exchange, name='SOLUSDT', quantity_precision=0)
+            account=self.account, name='SOLUSDT', quantity_precision=0)
         quantity = self.order_service.calculate_quantity(
             notional_size=Decimal("500"),
             price=Decimal("14.7180"),

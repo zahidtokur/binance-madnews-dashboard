@@ -55,7 +55,7 @@ class UpdateBalance(BaseCommand):
         timestamp = int(round(time.time() * 1000)) - 1000
         params = {"timestamp": timestamp}
         message = urllib.parse.urlencode(params)
-        secret_key = self.integration.conf.get('secret_key')
+        secret_key = self.integration.account.secret_key
         signature = hmac.new(
             secret_key.encode(), msg=message.encode(),
             digestmod=hashlib.sha256).hexdigest()
@@ -64,7 +64,7 @@ class UpdateBalance(BaseCommand):
 
     def get_headers(self):
         return {
-            "X-MBX-APIKEY": self.integration.conf["api_key"]
+            "X-MBX-APIKEY": self.integration.account.api_key
         }
 
     def send_request(self):
@@ -101,7 +101,7 @@ class SetCrossMargin(BaseBulkCommand):
 
     def get_headers(self):
         return {
-            "X-MBX-APIKEY": self.integration.conf["api_key"]
+            "X-MBX-APIKEY": self.integration.account.api_key
         }
 
     def get_request_data(self, object):
@@ -112,7 +112,7 @@ class SetCrossMargin(BaseBulkCommand):
             "marginType": "CROSSED"}
 
         message = urllib.parse.urlencode(request_data)
-        secret_key = self.integration.conf.get('secret_key')
+        secret_key = self.integration.account.secret_key
         signature = hmac.new(
             secret_key.encode(), msg=message.encode(),
             digestmod=hashlib.sha256).hexdigest()
@@ -139,7 +139,7 @@ class GetBrackets(BaseCommand):
 
     def get_headers(self):
         return {
-            "X-MBX-APIKEY": self.integration.conf["api_key"]
+            "X-MBX-APIKEY": self.integration.account.api_key
         }
 
     def get_request_params(self):
@@ -149,7 +149,7 @@ class GetBrackets(BaseCommand):
         }
 
         message = urllib.parse.urlencode(request_data)
-        secret_key = self.integration.conf.get('secret_key')
+        secret_key = self.integration.account.secret_key
         signature = hmac.new(
             secret_key.encode(), msg=message.encode(),
             digestmod=hashlib.sha256).hexdigest()
@@ -182,7 +182,7 @@ class SetLeverage(BaseBulkCommand):
 
     def get_headers(self):
         return {
-            "X-MBX-APIKEY": self.integration.conf["api_key"]
+            "X-MBX-APIKEY": self.integration.account.api_key
         }
 
     def get_request_data(self, object, leverage):
@@ -193,7 +193,7 @@ class SetLeverage(BaseBulkCommand):
             "leverage": leverage}
 
         message = urllib.parse.urlencode(request_data)
-        secret_key = self.integration.conf.get('secret_key')
+        secret_key = self.integration.account.secret_key
         signature = hmac.new(
             secret_key.encode(), msg=message.encode(),
             digestmod=hashlib.sha256).hexdigest()
@@ -265,7 +265,7 @@ class CreateOrder(BaseCommand):
 
     def get_headers(self):
         return {
-            "X-MBX-APIKEY": self.integration.conf["api_key"]
+            "X-MBX-APIKEY": self.integration.account.api_key
         }
 
     def get_request_data(self):
@@ -282,7 +282,7 @@ class CreateOrder(BaseCommand):
                 {"quantity": str(self.order_params["quantity"])})
 
         message = urllib.parse.urlencode(request_data)
-        secret_key = self.integration.conf.get('secret_key')
+        secret_key = self.integration.account.secret_key
         signature = hmac.new(
             secret_key.encode(), msg=message.encode(),
             digestmod=hashlib.sha256).hexdigest()
