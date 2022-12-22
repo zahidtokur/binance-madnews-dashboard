@@ -127,3 +127,26 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# Celery settings
+CELERY_BROKER_URL = "redis://localhost:6380"
+CELERY_RESULT_BACKEND = "redis://localhost:6380"
+CELERY_BEAT_SCHEDULE = {
+    'bf-update-balance': {
+        'task': 'core.integrations.binance_futures.tasks.update_balance_task',
+        'schedule': 60 * 15
+    },
+    'bf-get-symbols': {
+        'task': 'core.integrations.binance_futures.tasks.get_pairs_task',
+        'schedule': 60 * 60 * 12
+    },
+    'bf-set-cross-margin': {
+        'task': 'core.integrations.binance_futures.tasks.set_cross_margin_task',
+        'schedule': 60 * 60 * 12
+    },
+    'bf-set-leverage': {
+        'task': 'core.integrations.binance_futures.tasks.set_leverage_task',
+        'schedule': 60 * 60 * 12
+    }
+}
