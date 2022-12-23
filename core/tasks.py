@@ -12,7 +12,7 @@ def update_balance_task():
     accounts = Account.objects.all()
     for account in accounts:
         try:
-            integration = Integration(account, account.conf)
+            integration = Integration(account)
             integration.run_command("update_balance")
         except Exception as e:
             logger.warning(e)
@@ -24,7 +24,7 @@ def get_pairs_task():
     accounts = Account.objects.all()
     for account in accounts:
         try:
-            integration = Integration(account, account.conf)
+            integration = Integration(account)
             integration.run_command("get_pairs")
         except Exception as e:
             logger.warning(e)
@@ -37,7 +37,7 @@ def set_cross_margin_task():
     for account in accounts:
         try:
             pairs = Pair.objects.filter(account=account)
-            integration = Integration(account, account.conf)
+            integration = Integration(account)
             integration.run_command("set_cross_margin", objects=pairs)
         except Exception as e:
             logger.warning(e)
@@ -50,7 +50,7 @@ def set_leverage_task():
     for account in accounts:
         try:
             pairs = Pair.objects.filter(account=account)
-            integration = Integration(account, account.conf)
+            integration = Integration(account)
             integration.run_command("set_leverage", objects=pairs)
         except Exception as e:
             logger.warning(e)
