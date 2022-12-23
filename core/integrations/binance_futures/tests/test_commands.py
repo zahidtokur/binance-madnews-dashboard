@@ -10,7 +10,7 @@ from core.integrations.binance_futures.integration import Integration
 from core.resources.service import OrderService
 
 
-class BinanceTestCase(TestCase):
+class BinanceFuturesTestCase(TestCase):
     def setUp(self):
         self.account = Account.objects.create(
             name='Binance Test', secret_key="secretkeyforbinancefutures", api_key="apikeyforbinancefutures")

@@ -2,7 +2,7 @@ from collections import OrderedDict
 
 from core.integrations.base.integration import BaseIntegration
 from core.integrations.binance_futures.commands import GetPairs, UpdateBalance, SetCrossMargin, \
-    SetLeverage, GetBrackets
+    SetLeverage, GetBrackets, GetPairPrice, CreateOrder
 
 
 class Integration(BaseIntegration):
@@ -12,6 +12,8 @@ class Integration(BaseIntegration):
         ('set_cross_margin', SetCrossMargin),
         ('set_leverage', SetLeverage),
         ('get_brackets', GetBrackets),
+        ('get_pair_price', GetPairPrice),
+        ('create_order', CreateOrder)
     ])
 
     @property
