@@ -72,11 +72,11 @@
         <div class="card-body">
           <div class="form-check form-switch form-check-inline">
             <input class="form-check-input" type="checkbox" role="switch" id="postSound" checked>
-            <label class="form-check-label">Post Sound</label>
+            <label class="form-check-label">Post Notifications</label>
           </div>
           <div class="form-check form-switch form-check-inline">
             <input class="form-check-input" type="checkbox" role="switch" id="tweetSound" checked>
-            <label class="form-check-label">Tweet Sound</label>
+            <label class="form-check-label">Tweet Notifications</label>
           </div>
           <div class="form-check mt-2">
             <button type="button" id="clearNotifications" class="btn btn-dark">clear</button>
@@ -117,10 +117,10 @@
   <div class="row">
     <div class="col-md-4 offset-md-4 card">
       <div class="card-body">
-        <h5 class="card-title">No Trading Accounts Selected</h5>
-        <p class="card-text">Create and setup an exchange to start trading!</p>
-        <p class="card-text">Or select an existing account!</p>
-        <a href="{% url 'core:create' %}" class="btn btn-primary">Go to setup</a>
+        <h5 class="card-title">No Accounts Selected</h5>
+        <p class="card-text">Create and setup an account to start trading</p>
+        <p class="card-text">Or select an existing account</p>
+        <a href="{% url 'core:create' %}" class="btn btn-primary">Create Account</a>
       </div>
     </div>
   </div>

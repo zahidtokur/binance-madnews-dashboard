@@ -10,7 +10,7 @@
     <div class="row">
         {% if messages %}
           <div class="alert alert-warning alert-dismissible fade show" role="alert">
-            You should check in on some of those fields below.
+            You should check in on the errors below.
             <ul>
               {% for message in messages %}
                 <li>{{ message }}</li>
@@ -45,7 +45,3 @@
   </div>
   
 {% endblock content %}
-
-{% block scripts %}
-  <script src="{% static 'js/exchange-form.js' %}"></script>
-{% endblock scripts %}
