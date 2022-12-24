@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block title %}
-  Setup a Binance Futures Account
+  Delete Account : {{account.name}}
 {% endblock title %}
 
 {% block content %}
@@ -12,14 +12,12 @@
             <div class="card-body">
               <form method="POST" id="form-body">
                 {% csrf_token %}
-                <h5 class="card-title mb-3">Are you sure you want to delete account "{{object.name}}"?</h5>
+                <h5 class="card-title mb-3">Are you sure you want to delete account "{{account.name}}"?</h5>
                 <a href="{% url 'core:list' %}" class="btn btn-dark">Take me back</a>
                 <input type="submit" class="btn btn-danger" value="Confirm">
               </form>
             </div>
         </div>
     </div>
-    
   </div>
-  
 {% endblock content %}

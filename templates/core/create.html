@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block title %}
-  Setup a Binance Futures Account
+  Create a Binance Futures Account
 {% endblock title %}
 
 {% block content %}
@@ -23,7 +23,7 @@
             <div class="card-body">
               <form method="POST" id="form-body">
                 {% csrf_token %}
-                <h5 class="card-title">Setup an account</h5>
+                <h5 class="card-title">Create an account</h5>
                 <div class="mb-3">
                     <label class="form-label">Name your account</label>
                     <input type="text" class="form-control" name="name" required>

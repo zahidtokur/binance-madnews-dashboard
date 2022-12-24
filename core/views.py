@@ -107,3 +107,4 @@ class AccountDeleteView(DeleteView):
     success_url = reverse_lazy('core:list')
     template_name = "core/delete.html"
     pk_url_kwarg = "id"
+    context_object_name = "account"
