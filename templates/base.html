@@ -17,7 +17,7 @@
 <body class="bg-dark">
     <nav class="navbar fixed-bottom navbar-expand-lg bg-light">
         <div class="container-fluid">
-            <a class="navbar-brand" href="">Dashboard</a>
+            <a class="navbar-brand" href="{% url 'core:index' %}">Dashboard</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -30,11 +30,13 @@
                             {% for account in accounts %}
                                 <li><a class="dropdown-item" href="{% url 'core:set_main' id=account.id %}">{{account.name}}</a></li>
                             {% endfor %}
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{% url 'core:list' %}">Manage Accounts</a></li>
                         </ul>
                     </li>
                     {% endif %}
                     <li class="nav-item">
-                        <a class="nav-link" href="">Create Account</a>
+                        <a class="nav-link" href="{% url 'core:create' %}">Create Account</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="">Set Leverages</a>

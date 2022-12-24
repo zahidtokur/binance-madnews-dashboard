@@ -1,8 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
+from django.urls import reverse_lazy
 from django.views import View
+from django.views.generic.list import ListView
+from django.views.generic.edit import DeleteView
 from django.contrib import messages
-from django.http import HttpResponseRedirect
-from django.urls import reverse
 
 from core.models import Account
 from core.resources.serializers import AccountSerializer
@@ -10,13 +11,11 @@ from core.resources.serializers import AccountSerializer
 
 class IndexView(View):
     template_name = "core/index.html"
-    accounts = Account.objects.all()
 
     def get_context_data(self, request, *args, **kwargs):
-        context = {"accounts": self.accounts}
         account = self._get_selected_account(request.session)
         if account:
-            context.update({"selected_account": account})
+            context = {"selected_account": account}
         else:
             try:
                 del request.session["selected_account_id"]
@@ -27,7 +26,7 @@ class IndexView(View):
     def _get_selected_account(self, session):
         account_id = session.get("selected_account_id")
         try:
-            account = self.accounts.prefetch_related(
+            account = Account.objects.prefetch_related(
                 "pairs").get(id=account_id)
         except Account.DoesNotExist:
             account = None
@@ -46,14 +45,19 @@ class AccountCreateView(View):
 
     def post(self, request, *args, **kwargs):
         request_data = request.POST
-        data = AccountSerializer(data=request_data)
-        if not data.is_valid():
-            for err in data.errors:
+        serializer = AccountSerializer(data=request_data)
+        if serializer.is_valid():
+            try:
+                serializer.create(serializer.validated_data)
+                return reverse_lazy('core:index')
+            except Exception as e:
+                messages.add_message(request, messages.WARNING, str(e))
+        else:
+            for err in serializer.errors:
                 messages.add_message(
-                    request, messages.WARNING, str(data.errors[err]))
-            return HttpResponseRedirect(reverse('core:create'))
-        Account.objects.create(**data.validated_data)
-        return HttpResponseRedirect(reverse('core:index'))
+                    request, messages.WARNING, str(serializer.errors[err]))
+
+        return reverse_lazy('core:create')
 
 
 class SetMainAccountView(View):
@@ -64,4 +68,42 @@ class SetMainAccountView(View):
         account_id = self.kwargs.get("id")
         if self.get_object(request, account_id).exists():
             request.session["selected_account_id"] = account_id
-        return HttpResponseRedirect(reverse("core:index"))
+        return reverse_lazy("core:index")
+
+
+class AccountListView(ListView):
+    model = Account
+    template_name = "core/list.html"
+
+
+class AccountUpdateView(View):
+    template_name = "core/update.html"
+    model = Account
+
+    def get(self, request, *args, **kwargs):
+        obj = get_object_or_404(self.model, id=self.kwargs.get("id"))
+        return render(request, self.template_name, {"account": obj})
+
+    def post(self, request, *args, **kwargs):
+        obj = get_object_or_404(self.model, id=self.kwargs.get("id"))
+        request_data = request.POST
+        serializer = AccountSerializer(data=request_data)
+        if serializer.is_valid():
+            try:
+                serializer.update(obj, serializer.validated_data)
+                return reverse_lazy('core:list')
+            except Exception as e:
+                messages.add_message(request, messages.WARNING, str(e))
+        else:
+            for err in serializer.errors:
+                messages.add_message(
+                    request, messages.WARNING, str(serializer.errors[err]))
+                    
+        return reverse_lazy('core:update', kwargs={'id': obj.id})
+
+
+class AccountDeleteView(DeleteView):
+    model = Account
+    success_url = reverse_lazy('core:list')
+    template_name = "core/delete.html"
+    pk_url_kwarg = "id"
