@@ -91,7 +91,7 @@
             </div>
             <div class="card-body">
               <p class="card-text">{{selected_account.balance}} USDT</p>
-              <a href="" class="btn btn-primary btn-sm">Update</a>
+              <a href="{% url 'core:update_balance' %}" class="btn btn-primary btn-sm">Update</a>
             </div>
           </div>
         </div>
@@ -102,7 +102,7 @@
             </div>
             <div class="card-body">
               <p class="card-text">{{selected_account.pairs.count}} Pairs</p>
-              <a href="" class="btn btn-primary btn-sm">Update</a>
+              <a href="{% url 'core:get_pairs' %}" class="btn btn-primary btn-sm">Update</a>
             </div>
           </div>
         </div>

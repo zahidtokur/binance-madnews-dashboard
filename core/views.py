@@ -7,6 +7,7 @@ from django.contrib import messages
 
 from core.models import Account
 from core.resources.serializers import AccountSerializer
+from core.tasks import get_pairs_task, update_balance_task, set_cross_margin_task, set_leverage_task
 
 
 class IndexView(View):
@@ -108,3 +109,27 @@ class AccountDeleteView(DeleteView):
     template_name = "core/delete.html"
     pk_url_kwarg = "id"
     context_object_name = "account"
+
+
+class UpdateBalanceView(View):
+    def get(self, request, *args, **kwargs):
+        update_balance_task.apply_async(countdown=5)
+        return reverse_lazy('core:index')
+
+
+class GetPairsView(View):
+    def get(self, request, *args, **kwargs):
+        get_pairs_task.apply_async(countdown=5)
+        return reverse_lazy('core:index')
+
+
+class SetCrossMarginView(View):
+    def get(self, request, *args, **kwargs):
+        set_cross_margin_task.apply_async(countdown=5)
+        return reverse_lazy('core:index')
+
+
+class SetLeverageView(View):
+    def get(self, request, *args, **kwargs):
+        set_leverage_task.apply_async(countdown=5)
+        return reverse_lazy('core:index')
