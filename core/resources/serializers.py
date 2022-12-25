@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from core.models import Account
+from core.resources.enums import OrderSide, OrderType
 
 
 class AccountSerializer(serializers.Serializer):
@@ -19,4 +20,12 @@ class AccountSerializer(serializers.Serializer):
             'api_key', instance.api_key)
         instance.save()
         return instance
-    
+
+
+class OrderSerializer(serializers.Serializer):
+    pair = serializers.CharField(required=True)
+    multiplier = serializers.FloatField(required=True)
+    side = serializers.ChoiceField(
+        choices=OrderSide.choices(), default=OrderSide.Long.value)
+    type = serializers.ChoiceField(
+        choices=OrderType.choices(), default=OrderType.Market.value)

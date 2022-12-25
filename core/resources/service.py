@@ -41,7 +41,8 @@ class AccountService():
 
 
 class OrderService():
-    def calculate_quantity(self, notional_size, price, precision):
+    def calculate_quantity(self, balance, multiplier, price, precision):
+        notional_size = balance * Decimal(multiplier)
         quantity = notional_size / price
         if precision == 0:
             return quantity.quantize(Decimal('0'))
