@@ -8,10 +8,10 @@ socket.onmessage = function (event) {
     try {
         data = JSON.parse(event.data);
         console.log(data);
-        if (data._id) {
-          createPostToast(data);
-        } else if (data.info.twitterId) {
+        if (data.link.startsWith("https://twitter.com")) {
           createTweetToast(data);
+        } else {
+          createPostToast(data);
         }
     } catch (error) {}
 };
