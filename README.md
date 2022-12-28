@@ -2,7 +2,11 @@
 
 Binance Madnews Dashboard is a Binance Futures trading tool which aims to provide a speed boost to news and headline based crypto trading. 
 
-News feed is developed and made public by [TreeOfAlpha](https://twitter.com/Tree_of_Alpha). You can access the feed yourself [here](wss://www.madnews.io/ws).
+News feed is developed and made accessible by [TreeOfAlpha](https://twitter.com/Tree_of_Alpha). You can access the feed yourself from `wss://www.madnews.io/ws`
+
+<p align="center">
+  <img src="./image.png" alt="Binance Madnews Dashboard" width="738">
+</p>
 
 ## Features:
 
@@ -78,3 +82,7 @@ celery -A dashboard worker -l info -P eventlet
 # Linux/Mac
 celery -A dashboard worker -l info
 ```
+
+# Disclaimer
+
+This is a "weekend project" and I may have made mistakes. If you are going to use this to trade with your full account size, don't, you may incur big losses. Feel free to use it as a starting point for your own news trading terminal, or use it with caution.
