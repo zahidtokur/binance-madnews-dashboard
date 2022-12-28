@@ -2,7 +2,7 @@
 
 Binance Madnews Dashboard is a Binance Futures trading tool which aims to provide a speed boost to news and headline based crypto trading. 
 
-News feed is developed and made accessible by [TreeOfAlpha](https://twitter.com/Tree_of_Alpha). You can access the feed yourself from `wss://www.madnews.io/ws`
+News feed is developed and made accessible by [Tree of Alpha](https://twitter.com/Tree_of_Alpha). You can access the feed yourself from `wss://www.madnews.io/ws`
 
 <p align="center">
   <img src="./image.png" alt="Binance Madnews Dashboard" width="738">
