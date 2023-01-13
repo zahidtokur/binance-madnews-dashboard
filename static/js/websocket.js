@@ -8,7 +8,7 @@ socket.onmessage = function (event) {
     try {
         data = JSON.parse(event.data);
         console.log(data);
-        if (data.link.startsWith("https://twitter.com")) {
+        if (data.link) {
           createTweetToast(data);
         } else {
           createPostToast(data);
