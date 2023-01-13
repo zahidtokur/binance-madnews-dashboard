@@ -107,7 +107,7 @@ class SetCrossMargin(BaseBulkCommand):
     def get_request_data(self, object):
         request_data = {
             "timestamp": int(round(time.time() * 1000)) - 1000,
-            "recvWindow": 20000,
+            "recvWindow": 5000,
             "symbol": object.name,
             "marginType": "CROSSED"}
 
@@ -145,7 +145,7 @@ class GetBrackets(BaseCommand):
     def get_request_params(self):
         request_data = {
             "timestamp": int(round(time.time() * 1000)) - 1000,
-            "recvWindow": 20000
+            "recvWindow": 5000
         }
 
         message = urllib.parse.urlencode(request_data)
@@ -175,7 +175,7 @@ class SetLeverage(BaseBulkCommand):
         self.request_method = "POST"
         self.objects = objects
         balance = self.integration.account.balance
-        self.max_position_size = balance * 3
+        self.max_position_size = balance * 6
 
     def get_url(self):
         return self.integration.base_url + "/fapi/v1/leverage"
@@ -188,7 +188,7 @@ class SetLeverage(BaseBulkCommand):
     def get_request_data(self, object, leverage):
         request_data = {
             "timestamp": int(round(time.time() * 1000)) - 1000,
-            "recvWindow": 20000,
+            "recvWindow": 5000,
             "symbol": object.name,
             "leverage": leverage}
 
@@ -271,7 +271,7 @@ class CreateOrder(BaseCommand):
     def get_request_data(self):
         request_data = {
             "timestamp": int(round(time.time() * 1000)) - 2000,
-            "recvWindow": 20000,
+            "recvWindow": 5000,
             "symbol": self.order_params["pair"],
             "side": self.order_params.get("side") or "BUY",
             "type": self.order_params["type"],
