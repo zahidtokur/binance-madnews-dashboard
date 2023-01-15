@@ -169,23 +169,23 @@ class AccountDeleteView(DeleteView):
 
 class UpdateBalanceView(View):
     def get(self, request, *args, **kwargs):
-        update_balance_task.apply_async(countdown=5)
+        update_balance_task()
         return HttpResponseRedirect(reverse('core:index'))
 
 
 class GetPairsView(View):
     def get(self, request, *args, **kwargs):
-        get_pairs_task.apply_async(countdown=5)
+        get_pairs_task()
         return HttpResponseRedirect(reverse('core:index'))
 
 
 class SetCrossMarginView(View):
     def get(self, request, *args, **kwargs):
-        set_cross_margin_task.apply_async(countdown=5)
+        set_cross_margin_task()
         return HttpResponseRedirect(reverse('core:index'))
 
 
 class SetLeverageView(View):
     def get(self, request, *args, **kwargs):
-        set_leverage_task.apply_async(countdown=5)
+        set_leverage_task()
         return HttpResponseRedirect(reverse('core:index'))
